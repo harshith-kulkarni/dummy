@@ -1,0 +1,25 @@
+mjp dockerfile 
+FROM openjdk:17
+COPY target/MJP-1.0-SNAPSHOT.jar app.jar
+ENTRYPOINT ["java", "-jar", "app.jar"]
+
+dockercompose
+
+version: '3.8'
+services:
+  app:
+    build: .
+    ports:
+      - "8080:8080"
+    depends_on:
+      - db
+  db:
+    image: postgres
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: pass
+      POSTGRES_DB: mjpdb
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+volumes:
+  pgdata:
